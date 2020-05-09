@@ -31,11 +31,20 @@ public class EventRestController {
 	
 	@PostMapping("/api/events")
 	public ResponseEntity<Object> newEvent(@Valid @RequestBody Event newEvent, Errors errors) {
+		/*
 		if (errors.hasErrors()) {
 	        return new ResponseEntity<Object>("Missing mandatory field", HttpStatus.BAD_REQUEST);
 		}
 	    Event eventInfo = eventsRepository.save(newEvent);
 		return new ResponseEntity<Object>(eventInfo, HttpStatus.OK);
+		*/
+		if (errors.hasErrors()) {
+	        return new ResponseEntity<Object>("Missing mandatory field", HttpStatus.BAD_REQUEST);
+		}
+		
+		Event eventInfo = eventsRepository.save(newEvent);
+		return new ResponseEntity<Object>(this.getLocation(eventInfo), HttpStatus.OK);
+		
 	}
 	
 	@GetMapping("/api/events/{id}")
@@ -63,6 +72,10 @@ public class EventRestController {
         
        return new ResponseEntity<Object>(results, HttpStatus.OK);
 		
-	}	
+	}
+	
+	public String getLocation(Event event) {
+		return event.getLine1() + event.getLine2() + event.getCity() + event.getZip();
+	}
 	
 }
