@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,8 +23,11 @@ public class EventRestController {
 	private EventsRepository eventsRepository;
 	
 	@PostMapping("/api/events")
-	public ResponseEntity<Object> newEvent(@Valid @RequestBody Event newEvent) {
-		Event eventInfo = eventsRepository.save(newEvent);
+	public ResponseEntity<Object> newEvent(@Valid @RequestBody Event newEvent, Errors errors) {
+		if (errors.hasErrors()) {
+	        return new ResponseEntity<Object>("Missing mandatory field", HttpStatus.BAD_REQUEST);
+		}
+	    Event eventInfo = eventsRepository.save(newEvent);
 		return new ResponseEntity<Object>(eventInfo, HttpStatus.OK);
 	}
 	
