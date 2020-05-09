@@ -38,7 +38,7 @@ public class EventRestController {
 	public ResponseEntity<Object> getEventById(@PathVariable(value = "id") 
 							@PositiveOrZero(message = "Id must be greater or equal to 0") Long id) {
 		if (id <= 0) {
-	        return new ResponseEntity<Object>("Id must be greater or equal to 0", HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
 		}
 		Optional<Event> eventFound = eventsRepository.findById(id);
 		
